@@ -9,61 +9,81 @@ const SECRET = "urbanharvestsecret";
 
 // REGISTER
 router.post("/register", async (req, res) => {
+  try {
+    const email = req.body.email ? req.body.email.toLowerCase().trim() : "";
+    const name = req.body.name ? req.body.name.trim() : "";
+    const password = req.body.password;
 
-  const hashedPassword =
-    await bcrypt.hash(
-      req.body.password,
-      10
-    );
+    if (!email || !password || !name) {
+      return res.status(400).json({ message: "All fields are required" });
+    }
 
-  const user = new User({
-    name: req.body.name,
-    email: req.body.email,
-    password: hashedPassword
-  });
+    // Check if user already exists
+    const existingUser = await User.findOne({ email });
+    if (existingUser) {
+      return res.status(400).json({ message: "An account with this email already exists" });
+    }
 
-  await user.save();
+    const hashedPassword = await bcrypt.hash(password, 10);
 
-  res.json({
-    message: "User registered"
-  });
+    const user = new User({
+      name,
+      email,
+      password: hashedPassword
+    });
 
+    await user.save();
+
+    res.status(201).json({
+      message: "User registered successfully"
+    });
+  } catch (error) {
+    console.error("Registration error:", error);
+    res.status(500).json({
+      message: "Registration failed: " + error.message
+    });
+  }
 });
 
 // LOGIN
 router.post("/login", async (req, res) => {
+  try {
+    const email = req.body.email ? req.body.email.toLowerCase().trim() : "";
+    const password = req.body.password || "";
 
-  const user =
-    await User.findOne({
-      email: req.body.email
-    });
+    if (!email || !password) {
+      return res.status(400).json({ message: "Email and password are required" });
+    }
 
-  if (!user) {
-    return res.status(400).json({
-      message: "User not found"
-    });
-  }
+    const user = await User.findOne({ email });
 
-  const valid =
-    await bcrypt.compare(
-      req.body.password,
-      user.password
-    );
+    if (!user) {
+      return res.status(400).json({
+        message: "User not found"
+      });
+    }
 
-  if (!valid) {
-    return res.status(400).json({
-      message: "Invalid password"
-    });
-  }
+    const valid = await bcrypt.compare(password, user.password);
 
-  const token =
-    jwt.sign(
+    if (!valid) {
+      return res.status(400).json({
+        message: "Invalid password"
+      });
+    }
+
+    const token = jwt.sign(
       { id: user._id },
-      SECRET
+      SECRET,
+      { expiresIn: "24h" }
     );
 
-  res.json({ token });
-
+    res.json({ token });
+  } catch (error) {
+    console.error("Login error:", error);
+    res.status(500).json({
+      message: "Login failed: " + error.message
+    });
+  }
 });
 
 module.exports = router;

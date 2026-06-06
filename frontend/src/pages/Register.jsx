@@ -10,7 +10,9 @@ function Register() {
     e.preventDefault();
 
     try {
-      await api.post("/api/auth/register", { name, email, password });
+      const sanitizedEmail = email.toLowerCase().trim();
+      const sanitizedName = name.trim();
+      await api.post("/api/auth/register", { name: sanitizedName, email: sanitizedEmail, password });
 
       alert("Registration Successful");
     } catch (error) {
@@ -32,6 +34,7 @@ function Register() {
             value={name}
             onChange={(e) => setName(e.target.value)}
             required
+            autoComplete="name"
           />
 
           <input
@@ -40,6 +43,8 @@ function Register() {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required
+            autoComplete="email"
+            autoCapitalize="none"
           />
 
           <input
@@ -48,6 +53,7 @@ function Register() {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             required
+            autoComplete="new-password"
           />
 
           <button type="submit" className="primary-btn" style={{ width: "100%", marginTop: "12px" }}>
