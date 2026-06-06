@@ -154,7 +154,9 @@ function Events() {
 
   return (
     <div className="container">
-      <h1>Events</h1>
+      <h1 className="text-4xl font-bold text-center text-green-800 mb-8 border-b-4 border-green-500 pb-2 inline-block">
+  Events
+</h1>
 
       {/* CRUD Add Button */}
       {isLoggedIn && (
