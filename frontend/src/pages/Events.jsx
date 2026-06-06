@@ -154,7 +154,7 @@ function Events() {
 
   return (
     <div className="container">
-      <h1 className="text-4xl font-bold text-center text-green-800 mb-8 border-b-4 border-green-500 pb-2 inline-block">
+      <h1 className="text-5xl font-bold text-center text-red-500 mb-8">
   Events
 </h1>
 
