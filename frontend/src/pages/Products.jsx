@@ -41,7 +41,9 @@ function Products() {
 
   return (
     <div className="container">
-      <h1>Products</h1>
+     <h1 className="text-4xl md:text-5xl font-extrabold text-center text-green-900 mb-10">
+  Products
+</h1>
 
       <div className="cards-grid">
         {products.map((product) => (

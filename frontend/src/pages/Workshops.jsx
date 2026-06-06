@@ -41,7 +41,9 @@ function Workshops() {
 
   return (
     <div className="container">
-      <h1>Workshops</h1>
+      <h1 className="text-4xl md:text-5xl font-extrabold text-center text-green-900 mb-10">
+  Workshops
+</h1>
 
       <div className="cards-grid">
         {workshops.map((workshop) => (
