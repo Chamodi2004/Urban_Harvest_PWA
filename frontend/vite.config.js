@@ -11,6 +11,21 @@ export default defineConfig({
     VitePWA({
       registerType: "autoUpdate",
 
+      includeAssets: [
+        "favicon.jpg",
+        "IMG1.jpg",
+        "IMG2.jpg",
+        "workshop.jpg",
+        "composite bin.jpg",
+        "recycling.jpg",
+        "seeds.jpg",
+        "tools.jpg",
+        "gardening.jpg",
+        "icon-192.png",
+        "icon-512.png",
+        "offline.html",
+      ],
+
       manifest: {
         name: "Urban Harvest Hub",
         short_name: "UrbanHarvest",
@@ -34,7 +49,28 @@ export default defineConfig({
             type: "image/png"
           }
         ]
-      }
+      },
+
+      workbox: {
+        globPatterns: ["**/*.{js,css,html,ico,png,jpg,jpeg,svg,webp,webmanifest}"],
+        navigateFallback: "/index.html",
+        runtimeCaching: [
+          {
+            urlPattern: ({ request }) => request.destination === "image",
+            handler: "CacheFirst",
+            options: {
+              cacheName: "static-images",
+              expiration: {
+                maxEntries: 80,
+                maxAgeSeconds: 60 * 60 * 24 * 365,
+              },
+              cacheableResponse: {
+                statuses: [0, 200],
+              },
+            },
+          },
+        ],
+      },
     })
   ]
 });

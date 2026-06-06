@@ -101,17 +101,6 @@ function Navbar() {
 
         <div className="mobile-controls">
           <LanguageSelector />
-          <button
-            className="theme-btn"
-            onClick={() => {
-              toggleTheme();
-              setMenuOpen(false);
-            }}
-            aria-label={darkMode ? "Switch to light mode" : "Switch to dark mode"}
-            title={darkMode ? "Light mode" : "Dark mode"}
-          >
-            {darkMode ? "☀️" : "🌙"}
-          </button>
         </div>
       </div>
 
