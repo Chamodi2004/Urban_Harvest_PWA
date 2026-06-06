@@ -1,13 +1,20 @@
-import { Link } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import LanguageSelector from "./LanguageSelector";
 
 function Navbar() {
+  const location = useLocation();
+  const navigate = useNavigate();
   const [menuOpen, setMenuOpen] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [darkMode, setDarkMode] = useState(() => {
     const savedTheme = localStorage.getItem("theme");
     return savedTheme === "dark";
   });
+
+  useEffect(() => {
+    setIsLoggedIn(!!localStorage.getItem("token"));
+  }, [location]);
 
   useEffect(() => {
     if (darkMode) {
@@ -21,6 +28,14 @@ function Navbar() {
     const nextDark = !darkMode;
     setDarkMode(nextDark);
     localStorage.setItem("theme", nextDark ? "dark" : "light");
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    setIsLoggedIn(false);
+    setMenuOpen(false);
+    alert("Logged out successfully");
+    navigate("/");
   };
 
   return (
@@ -42,6 +57,29 @@ function Navbar() {
         <Link to="/products" onClick={() => setMenuOpen(false)}>Products</Link>
 
         <Link to="/workshops" onClick={() => setMenuOpen(false)}>Workshops</Link>
+
+        {isLoggedIn ? (
+          <button
+            onClick={handleLogout}
+            style={{
+              border: "none",
+              cursor: "pointer",
+              background: "transparent",
+              color: "white",
+              fontSize: "1rem",
+              textAlign: "left",
+              fontFamily: "inherit",
+              padding: 0
+            }}
+          >
+            Logout
+          </button>
+        ) : (
+          <>
+            <Link to="/login" onClick={() => setMenuOpen(false)}>Login</Link>
+            <Link to="/register" onClick={() => setMenuOpen(false)}>Register</Link>
+          </>
+        )}
 
         <div className="mobile-controls">
           <LanguageSelector />

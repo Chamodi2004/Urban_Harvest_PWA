@@ -1,8 +1,11 @@
+import { useState } from "react";
+
 function NotificationButton() {
-  const [permission, setPermission] =
+  const [permission, setPermission] = useState(() =>
     typeof Notification !== "undefined"
       ? Notification.permission
-      : "denied";
+      : "denied"
+  );
 
   const updatePermission = () => {
     if (typeof Notification !== "undefined") {
