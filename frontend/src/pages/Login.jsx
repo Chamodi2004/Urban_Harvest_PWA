@@ -2,14 +2,14 @@ import { useState } from "react";
 import api from "../services/api";
 
 function Login() {
-  const [email, setEmail] = useState("");
+  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const sanitizedEmail = email.toLowerCase().trim();
-      const res = await api.post("/api/auth/login", { email: sanitizedEmail, password });
+      const sanitizedUsername = username.toLowerCase().trim();
+      const res = await api.post("/api/auth/login", { username: sanitizedUsername, password });
 
       localStorage.setItem("token", res.data.token);
       alert("Login Successful");
@@ -26,12 +26,12 @@ function Login() {
 
         <form onSubmit={handleSubmit}>
           <input
-            type="email"
-            placeholder="Email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            type="username"
+            placeholder="Username"
+            value={username}
+            onChange={(u) => setUsername(u.target.value)}
             required
-            autoComplete="email"
+            autoComplete="username"
             autoCapitalize="none"
           />
 
