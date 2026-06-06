@@ -246,7 +246,7 @@ body.dark .about-copy li::before {
   margin: 0 auto;
 }
 
-/* Helper to vertically center content while accounting for fixed navbar */
+
 .center-page {
   display: flex;
   align-items: center;
@@ -645,6 +645,111 @@ body.dark .navbar {
 .card h2 {
   font-size: 1.4rem;
   color: #11492e;
+}
+
+/* =========================
+   LOCATION CARD FIX
+========================= */
+
+.location-card {
+  width: 100%;
+  max-width: 420px;
+
+  background: #fff;
+  border: 1px solid #d8e6d8;
+  border-radius: 24px;
+
+  padding: 20px;
+
+  box-shadow: 0 10px 30px rgba(45, 84, 45, 0.1);
+
+  height: auto;
+  min-height: auto;
+
+  margin: 0 auto;
+}
+
+.location-card h3 {
+  margin-bottom: 16px;
+  color: #11492e;
+}
+
+.location-text {
+  margin-top: 12px;
+  word-break: break-word;
+}
+
+.location-text a {
+  display: inline-block;
+  margin-left: 8px;
+  color: #2f7b3b;
+  font-weight: 600;
+}
+
+.location-error {
+  color: #b00020;
+  margin-top: 12px;
+}
+
+/* =========================
+   SUPPORT ROW FIX
+========================= */
+
+.support-row {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+/* =========================
+   CARD HEIGHT FIX
+========================= */
+
+.card {
+  height: auto !important;
+}
+
+/* =========================
+   MOBILE FIXES
+========================= */
+
+@media (max-width: 768px) {
+
+  .page {
+    padding-top: 90px;
+  }
+
+  .hero-section,
+  .about-section {
+    grid-template-columns: 1fr;
+  }
+
+  .hero-copy {
+    order: 2;
+  }
+
+  .hero-visual {
+    order: 1;
+  }
+
+  .hero-visual img,
+  .about-image img {
+    max-height: 250px;
+  }
+
+  .home-features {
+    grid-template-columns: 1fr;
+  }
+
+  .location-card {
+    max-width: 100%;
+  }
+
+  .logo {
+    max-width: 160px;
+  }
 }
 
 /* Footer */
