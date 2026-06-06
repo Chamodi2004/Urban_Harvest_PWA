@@ -570,7 +570,7 @@ body.dark .navbar {
 
     position: absolute;
 
-    top: 72px;
+    top: 100%;
     left: 0;
 
     width: 100%;
@@ -743,10 +743,6 @@ body.dark .navbar {
 
   .location-card {
     max-width: 100%;
-  }
-
-  .logo {
-    max-width: 160px;
   }
 }
 
