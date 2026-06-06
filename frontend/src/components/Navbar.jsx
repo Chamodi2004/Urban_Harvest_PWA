@@ -32,14 +32,15 @@ function Navbar() {
   }, [menuOpen]);
 
   useEffect(() => {
-    const handleResize = () => {
-      if (window.innerWidth > 768) {
+    const desktopQuery = window.matchMedia("(min-width: 769px)");
+    const closeOnDesktop = (event) => {
+      if (event.matches) {
         setMenuOpen(false);
       }
     };
 
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
+    desktopQuery.addEventListener("change", closeOnDesktop);
+    return () => desktopQuery.removeEventListener("change", closeOnDesktop);
   }, []);
 
   const toggleTheme = () => {
@@ -61,6 +62,34 @@ function Navbar() {
       <div className="logo">
         <img src="/favicon.jpg" alt="Urban Harvest Hub logo" className="logo-img" />
         <span>Urban Harvest Hub</span>
+      </div>
+
+      <div className="nav-right">
+        <LanguageSelector />
+      </div>
+
+      <div className="controls">
+        <button
+          className="theme-btn"
+          onClick={toggleTheme}
+          aria-label={darkMode ? "Switch to light mode" : "Switch to dark mode"}
+          title={darkMode ? "Light mode" : "Dark mode"}
+        >
+          {darkMode ? "☀️" : "🌙"}
+        </button>
+
+        <button
+          className="hamburger"
+          onClick={() => setMenuOpen(!menuOpen)}
+          aria-label="Toggle navigation menu"
+          aria-expanded={menuOpen}
+        >
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" style={{ display: "block" }}>
+            <line x1="3" y1="12" x2="21" y2="12"></line>
+            <line x1="3" y1="6" x2="21" y2="6"></line>
+            <line x1="3" y1="18" x2="21" y2="18"></line>
+          </svg>
+        </button>
       </div>
 
       <div
@@ -102,33 +131,6 @@ function Navbar() {
         <div className="mobile-controls">
           <LanguageSelector />
         </div>
-      </div>
-
-      <div className="nav-right">
-        <LanguageSelector />
-      </div>
-
-      <div className="controls">
-        <button
-          className="theme-btn"
-          onClick={toggleTheme}
-          aria-label={darkMode ? "Switch to light mode" : "Switch to dark mode"}
-          title={darkMode ? "Light mode" : "Dark mode"}
-        >
-          {darkMode ? "☀️" : "🌙"}
-        </button>
-
-        <button
-          className="hamburger"
-          onClick={() => setMenuOpen(!menuOpen)}
-          aria-label="Toggle navigation menu"
-        >
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" style={{ display: "block" }}>
-            <line x1="3" y1="12" x2="21" y2="12"></line>
-            <line x1="3" y1="6" x2="21" y2="6"></line>
-            <line x1="3" y1="18" x2="21" y2="18"></line>
-          </svg>
-        </button>
       </div>
     </nav>
   );

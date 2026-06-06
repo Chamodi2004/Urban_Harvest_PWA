@@ -54,7 +54,20 @@ export default defineConfig({
       workbox: {
         globPatterns: ["**/*.{js,css,html,ico,png,jpg,jpeg,svg,webp,webmanifest}"],
         navigateFallback: "/index.html",
+        navigateFallbackDenylist: [/^\/api/, /\.[a-zA-Z0-9]+$/],
         runtimeCaching: [
+          {
+            urlPattern: ({ request }) => request.mode === "navigate",
+            handler: "NetworkFirst",
+            options: {
+              cacheName: "pages-cache",
+              networkTimeoutSeconds: 5,
+              expiration: {
+                maxEntries: 10,
+                maxAgeSeconds: 60 * 60 * 24,
+              },
+            },
+          },
           {
             urlPattern: ({ request }) => request.destination === "image",
             handler: "CacheFirst",
