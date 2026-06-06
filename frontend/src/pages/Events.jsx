@@ -10,7 +10,7 @@ const sampleEvents = [
     category: "Gardening",
     location: "Downtown Park",
     image: "/workshop.jpg",
-    date: "2026-06-15"
+    date: "2026-06-15",
   },
   {
     _id: "2",
@@ -19,7 +19,7 @@ const sampleEvents = [
     category: "Composting",
     location: "Community Center",
     image: "/composite bin.jpg",
-    date: "2026-06-20"
+    date: "2026-06-20",
   },
   {
     _id: "3",
@@ -28,8 +28,8 @@ const sampleEvents = [
     category: "Recycling",
     location: "Main Street",
     image: "/recycling.jpg",
-    date: "2026-06-25"
-  }
+    date: "2026-06-25",
+  },
 ];
 
 function Events() {
@@ -38,10 +38,10 @@ function Events() {
   const [category, setCategory] = useState("All");
   const [loading, setLoading] = useState(true);
 
-  // Authentication & CRUD States
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [showForm, setShowForm] = useState(false);
   const [editingId, setEditingId] = useState(null);
+
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [eventCategory, setEventCategory] = useState("Gardening");
@@ -54,15 +54,12 @@ function Events() {
     api
       .get("/events")
       .then((res) => {
-        setEvents(res.data && res.data.length > 0 ? res.data : sampleEvents);
+        setEvents(res.data?.length ? res.data : sampleEvents);
       })
-      .catch((err) => {
-        console.error("Failed to fetch events from API:", err);
+      .catch(() => {
         setEvents(sampleEvents);
       })
-      .finally(() => {
-        setLoading(false);
-      });
+      .finally(() => setLoading(false));
   };
 
   useEffect(() => {
@@ -72,25 +69,23 @@ function Events() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
     const eventData = {
       title,
       description,
       category: eventCategory,
       location,
       date,
-      image
+      image,
     };
 
     try {
       if (editingId) {
         await api.put(`/events/${editingId}`, eventData);
-        alert("Event updated successfully!");
       } else {
         await api.post("/events", eventData);
-        alert("Event created successfully!");
       }
 
-      // Reset Form State
       setTitle("");
       setDescription("");
       setEventCategory("Gardening");
@@ -100,171 +95,156 @@ function Events() {
       setEditingId(null);
       setShowForm(false);
 
-      // Refresh data
       fetchEvents();
     } catch (error) {
-      console.error("CRUD operation failed:", error);
-      alert("Operation failed: " + (error.response?.data?.message || error.message));
+      alert(error.response?.data?.message || error.message);
     }
   };
 
   const handleEdit = (event) => {
     setEditingId(event._id);
-    setTitle(event.title || "");
-    setDescription(event.description || "");
-    setEventCategory(event.category || "Gardening");
-    setLocation(event.location || "");
-    setDate(event.date ? event.date.substring(0, 10) : "");
-    setImage(event.image || "/workshop.jpg");
+    setTitle(event.title);
+    setDescription(event.description);
+    setEventCategory(event.category);
+    setLocation(event.location);
+    setDate(event.date?.substring(0, 10));
+    setImage(event.image);
     setShowForm(true);
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
   const handleDelete = async (id) => {
-    if (!window.confirm("Are you sure you want to delete this event?")) return;
+    if (!confirm("Delete this event?")) return;
+
     try {
       await api.delete(`/events/${id}`);
-      alert("Event deleted successfully!");
       fetchEvents();
     } catch (error) {
-      console.error("Delete operation failed:", error);
-      alert("Delete failed: " + (error.response?.data?.message || error.message));
+      alert(error.message);
     }
   };
 
   const filteredEvents = events.filter((event) => {
-    const searchMatch = (event.title || "")
+    const matchSearch = event.title
       .toLowerCase()
       .includes(search.toLowerCase());
 
-    const categoryMatch =
-      category === "All" ||
-      event.category === category;
+    const matchCategory =
+      category === "All" || event.category === category;
 
-    return searchMatch && categoryMatch;
+    return matchSearch && matchCategory;
   });
 
   if (loading) {
     return (
-      <div className="container">
-        <h2>Loading events...</h2>
+      <div className="max-w-5xl mx-auto pt-24 px-4">
+        <h2 className="text-xl font-semibold text-green-900">
+          Loading events...
+        </h2>
       </div>
     );
   }
 
   return (
-    <div className="container">
-      <h1 className="text-5xl font-bold text-center text-red-500 mb-8">
-  Events
-</h1>
+    <div className="max-w-5xl mx-auto pt-24 px-4 pb-10">
 
-      {/* CRUD Add Button */}
+      {/* TITLE */}
+      <h1 className="text-4xl md:text-5xl font-extrabold text-center text-green-900 mb-10">
+        Events
+      </h1>
+
+      {/* ADD BUTTON */}
       {isLoggedIn && (
-        <div style={{ marginBottom: "30px", textAlign: "center" }}>
+        <div className="text-center mb-6">
           <button
-            className="primary-btn"
             onClick={() => {
               setShowForm(!showForm);
-              if (showForm) {
-                setEditingId(null);
-                setTitle("");
-                setDescription("");
-                setLocation("");
-                setDate("");
-              }
+              setEditingId(null);
             }}
+            className="px-6 py-3 bg-green-700 text-white font-bold rounded-full hover:bg-green-800 transition"
           >
             {showForm ? "Cancel" : "Add New Event"}
           </button>
         </div>
       )}
 
-      {/* CRUD Form */}
+      {/* FORM */}
       {showForm && (
-        <div className="card" style={{ maxWidth: "600px", margin: "0 auto 40px auto", padding: "30px" }}>
-          <h2>{editingId ? "Edit Event" : "Create Event"}</h2>
-          <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: "16px", marginTop: "20px" }}>
-            <div>
-              <label style={{ display: "block", marginBottom: "6px", fontWeight: "600", color: "var(--text)" }}>Title *</label>
-              <input
-                type="text"
-                value={title}
-                onChange={(e) => setTitle(e.target.value)}
-                required
-                placeholder="e.g. Tree Planting Drive"
-              />
-            </div>
-            <div>
-              <label style={{ display: "block", marginBottom: "6px", fontWeight: "600", color: "var(--text)" }}>Description *</label>
-              <textarea
-                value={description}
-                onChange={(e) => setDescription(e.target.value)}
-                required
-                placeholder="Describe the event..."
-                rows="4"
-                style={{
-                  width: "100%",
-                  padding: "12px 14px",
-                  borderRadius: "12px",
-                  border: "1px solid #d6e3d6",
-                  background: "#fbfdfb",
-                  color: "#17321f",
-                  fontFamily: "inherit"
-                }}
-              />
-            </div>
-            <div>
-              <label style={{ display: "block", marginBottom: "6px", fontWeight: "600", color: "var(--text)" }}>Category</label>
-              <select value={eventCategory} onChange={(e) => setEventCategory(e.target.value)}>
-                <option value="Gardening">Gardening</option>
-                <option value="Composting">Composting</option>
-                <option value="Recycling">Recycling</option>
-              </select>
-            </div>
-            <div>
-              <label style={{ display: "block", marginBottom: "6px", fontWeight: "600", color: "var(--text)" }}>Location</label>
-              <input
-                type="text"
-                value={location}
-                onChange={(e) => setLocation(e.target.value)}
-                placeholder="e.g. Community Garden"
-              />
-            </div>
-            <div>
-              <label style={{ display: "block", marginBottom: "6px", fontWeight: "600", color: "var(--text)" }}>Date</label>
-              <input
-                type="date"
-                value={date}
-                onChange={(e) => setDate(e.target.value)}
-              />
-            </div>
-            <div>
-              <label style={{ display: "block", marginBottom: "6px", fontWeight: "600", color: "var(--text)" }}>Image Preset</label>
-              <select value={image} onChange={(e) => setImage(e.target.value)}>
-                <option value="/workshop.jpg">Workshop (Default)</option>
-                <option value="/composite bin.jpg">Composting</option>
-                <option value="/recycling.jpg">Recycling</option>
-                <option value="/gardening.jpg">Gardening</option>
-                <option value="/seeds.jpg">Seeds</option>
-              </select>
-            </div>
-            <button type="submit" className="primary-btn" style={{ width: "100%", marginTop: "10px" }}>
-              {editingId ? "Save Changes" : "Create Event"}
-            </button>
-          </form>
-        </div>
+        <form
+          onSubmit={handleSubmit}
+          className="bg-white p-6 rounded-2xl shadow-lg max-w-2xl mx-auto mb-10"
+        >
+          <h2 className="text-2xl font-bold mb-4 text-green-900">
+            {editingId ? "Edit Event" : "Create Event"}
+          </h2>
+
+          <input
+            className="w-full p-3 border rounded-xl bg-green-50 mb-4"
+            placeholder="Title"
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+          />
+
+          <textarea
+            className="w-full p-3 border rounded-xl bg-green-50 mb-4"
+            placeholder="Description"
+            rows="4"
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+          />
+
+          <select
+            className="w-full p-3 border rounded-xl bg-green-50 mb-4"
+            value={eventCategory}
+            onChange={(e) => setEventCategory(e.target.value)}
+          >
+            <option>Gardening</option>
+            <option>Composting</option>
+            <option>Recycling</option>
+          </select>
+
+          <input
+            className="w-full p-3 border rounded-xl bg-green-50 mb-4"
+            placeholder="Location"
+            value={location}
+            onChange={(e) => setLocation(e.target.value)}
+          />
+
+          <input
+            type="date"
+            className="w-full p-3 border rounded-xl bg-green-50 mb-4"
+            value={date}
+            onChange={(e) => setDate(e.target.value)}
+          />
+
+          <select
+            className="w-full p-3 border rounded-xl bg-green-50 mb-4"
+            value={image}
+            onChange={(e) => setImage(e.target.value)}
+          >
+            <option value="/workshop.jpg">Workshop</option>
+            <option value="/composite bin.jpg">Composting</option>
+            <option value="/recycling.jpg">Recycling</option>
+            <option value="/gardening.jpg">Gardening</option>
+          </select>
+
+          <button className="w-full bg-green-700 text-white py-3 rounded-xl font-bold hover:bg-green-800">
+            {editingId ? "Save Changes" : "Create Event"}
+          </button>
+        </form>
       )}
 
-      {/* Search Box */}
+      {/* SEARCH */}
       <input
-        type="text"
+        className="w-full p-3 mb-4 border border-green-200 rounded-xl bg-green-50"
         placeholder="Search events..."
         value={search}
         onChange={(e) => setSearch(e.target.value)}
       />
 
-      {/* Category Filter */}
+      {/* FILTER */}
       <select
+        className="w-full p-3 mb-6 border border-green-200 rounded-xl bg-green-50"
         value={category}
         onChange={(e) => setCategory(e.target.value)}
       >
@@ -274,66 +254,62 @@ function Events() {
         <option value="Recycling">Recycling</option>
       </select>
 
-      {/* Event Cards */}
-      {filteredEvents.length === 0 ? (
-        <p>No events found.</p>
-      ) : (
-        <div className="cards-grid">
-          {filteredEvents.map((event) => (
-            <div
-              key={event._id}
-              className="card"
-            >
-              <img
-                src={event.image}
-                alt={event.title}
-              />
+      {/* CARDS */}
+      <div className="grid gap-6 grid-cols-1 md:grid-cols-2">
+        {filteredEvents.map((event) => (
+          <div
+            key={event._id}
+            className="bg-white rounded-2xl shadow-md p-4 flex flex-col hover:shadow-lg transition"
+          >
+            <img
+              src={event.image}
+              className="w-full h-48 object-cover rounded-xl mb-4"
+              alt={event.title}
+            />
 
-              <h3>{event.title}</h3>
+            <h3 className="text-xl font-bold text-green-900 mb-2">
+              {event.title}
+            </h3>
 
-              <p>{event.description}</p>
+            <p className="text-gray-600 mb-2">{event.description}</p>
 
-              <p>
-                <strong>Category:</strong>{" "}
-                {event.category}
-              </p>
+            <p className="text-sm text-gray-500">
+              <b>Category:</b> {event.category}
+            </p>
 
-              <p>
-                <strong>Location:</strong>{" "}
-                {event.location}
-              </p>
+            <p className="text-sm text-gray-500 mb-4">
+              <b>Location:</b> {event.location}
+            </p>
 
-              <div style={{ display: "flex", gap: "10px", marginTop: "auto", paddingTop: "16px" }}>
-                <Link
-                  to={`/events/${event._id}`}
-                  style={{ flex: 1, textAlign: "center", marginTop: 0 }}
-                >
-                  View Details
-                </Link>
-                
-                {isLoggedIn && (
-                  <>
-                    <button
-                      className="secondary-btn"
-                      onClick={() => handleEdit(event)}
-                      style={{ padding: "10px 16px", fontSize: "0.95rem", borderRadius: "8px" }}
-                    >
-                      Edit
-                    </button>
-                    <button
-                      className="primary-btn"
-                      onClick={() => handleDelete(event._id)}
-                      style={{ padding: "10px 16px", fontSize: "0.95rem", borderRadius: "8px", background: "#c62828", boxShadow: "none" }}
-                    >
-                      Delete
-                    </button>
-                  </>
-                )}
-              </div>
+            <div className="flex gap-3 mt-auto">
+              <Link
+                to={`/events/${event._id}`}
+                className="flex-1 text-center bg-green-700 text-white py-2 rounded-xl font-semibold hover:bg-green-800"
+              >
+                View
+              </Link>
+
+              {isLoggedIn && (
+                <>
+                  <button
+                    onClick={() => handleEdit(event)}
+                    className="px-4 py-2 bg-yellow-500 text-white rounded-xl"
+                  >
+                    Edit
+                  </button>
+
+                  <button
+                    onClick={() => handleDelete(event._id)}
+                    className="px-4 py-2 bg-red-600 text-white rounded-xl"
+                  >
+                    Delete
+                  </button>
+                </>
+              )}
             </div>
-          ))}
-        </div>
-      )}
+          </div>
+        ))}
+      </div>
     </div>
   );
 }
