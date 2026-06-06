@@ -15,30 +15,30 @@ function EventDetails() {
   }, [id]);
 
   if (!event) {
-    return <h2>Loading...</h2>;
+    return (
+      <div className="container">
+        <h2>Loading...</h2>
+      </div>
+    );
   }
 
   return (
     <div className="container">
-      <img
-        src={event.image}
-        alt={event.title}
-        style={{ maxWidth: "100%", height: "auto", borderRadius: "16px" }}
-      />
+      <article className="detail-card">
+        <img src={event.image} alt={event.title} />
 
-      <h1>{event.title}</h1>
+        <h1>{event.title}</h1>
 
-      <p>{event.description}</p>
+        <p>{event.description}</p>
 
-      <p>
-        <strong>Category:</strong>
-        {event.category}
-      </p>
+        <p>
+          <strong>Category:</strong> {event.category}
+        </p>
 
-      <p>
-        <strong>Location:</strong>
-        {event.location}
-      </p>
+        <p>
+          <strong>Location:</strong> {event.location}
+        </p>
+      </article>
     </div>
   );
 }

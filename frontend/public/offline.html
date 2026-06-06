@@ -1,15 +1,32 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="theme-color" content="#2e7d32" />
+  <title>Offline - Urban Harvest Hub</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      min-height: 100dvh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      font-family: Arial, sans-serif;
+      background: #e5f7ed;
+      color: #11492e;
+      text-align: center;
+    }
+    h1 { font-size: clamp(1.5rem, 5vw, 2rem); margin-bottom: 12px; }
+    p { font-size: 1rem; line-height: 1.6; max-width: 28rem; }
+  </style>
+</head>
 <body>
-
-<h1>
-You are offline
-</h1>
-
-<p>
-Urban Harvest Hub
-works offline.
-</p>
-
+  <div>
+    <h1>You are offline</h1>
+    <p>Urban Harvest Hub works offline. Reconnect to load the latest events and products.</p>
+  </div>
 </body>
 </html>

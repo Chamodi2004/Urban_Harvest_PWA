@@ -137,7 +137,7 @@ function Events() {
 
   if (loading) {
     return (
-      <div className="max-w-5xl mx-auto pt-24 px-4">
+      <div className="page-content">
         <h2 className="text-xl font-semibold text-green-900">
           Loading events...
         </h2>
@@ -146,10 +146,10 @@ function Events() {
   }
 
   return (
-    <div className="max-w-5xl mx-auto pt-24 px-4 pb-10">
+    <div className="page-content">
 
       {/* TITLE */}
-      <h1 className="text-4xl md:text-5xl font-extrabold text-center text-green-900 mb-10">
+      <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-center text-green-900 mb-8 sm:mb-10">
         Events
       </h1>
 
@@ -161,7 +161,7 @@ function Events() {
               setShowForm(!showForm);
               setEditingId(null);
             }}
-            className="px-6 py-3 bg-green-700 text-white font-bold rounded-full hover:bg-green-800 transition"
+            className="px-6 py-3 min-h-11 bg-green-700 text-white font-bold rounded-full hover:bg-green-800 transition"
           >
             {showForm ? "Cancel" : "Add New Event"}
           </button>
@@ -255,7 +255,7 @@ function Events() {
       </select>
 
       {/* CARDS */}
-      <div className="grid gap-6 grid-cols-1 md:grid-cols-2">
+      <div className="grid gap-6 grid-cols-1 sm:grid-cols-2">
         {filteredEvents.map((event) => (
           <div
             key={event._id}
@@ -281,10 +281,10 @@ function Events() {
               <b>Location:</b> {event.location}
             </p>
 
-            <div className="flex gap-3 mt-auto">
+            <div className="event-actions">
               <Link
                 to={`/events/${event._id}`}
-                className="flex-1 text-center bg-green-700 text-white py-2 rounded-xl font-semibold hover:bg-green-800"
+                className="text-center bg-green-700 text-white py-2.5 px-4 rounded-xl font-semibold hover:bg-green-800 inline-flex items-center justify-center"
               >
                 View
               </Link>
@@ -293,14 +293,14 @@ function Events() {
                 <>
                   <button
                     onClick={() => handleEdit(event)}
-                    className="px-4 py-2 bg-yellow-500 text-white rounded-xl"
+                    className="px-4 py-2.5 bg-yellow-500 text-white rounded-xl font-semibold"
                   >
                     Edit
                   </button>
 
                   <button
                     onClick={() => handleDelete(event._id)}
-                    className="px-4 py-2 bg-red-600 text-white rounded-xl"
+                    className="px-4 py-2.5 bg-red-600 text-white rounded-xl font-semibold"
                   >
                     Delete
                   </button>
