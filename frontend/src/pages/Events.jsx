@@ -37,7 +37,6 @@ function Events() {
   const [search, setSearch] = useState("");
   const [category, setCategory] = useState("All");
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
 
   useEffect(() => {
     api

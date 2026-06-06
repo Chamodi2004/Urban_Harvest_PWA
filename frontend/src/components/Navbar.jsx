@@ -4,27 +4,23 @@ import LanguageSelector from "./LanguageSelector";
 
 function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
-  const [darkMode, setDarkMode] = useState(false);
+  const [darkMode, setDarkMode] = useState(() => {
+    const savedTheme = localStorage.getItem("theme");
+    return savedTheme === "dark";
+  });
 
   useEffect(() => {
-    const savedTheme = localStorage.getItem("theme");
-
-    if (savedTheme === "dark") {
+    if (darkMode) {
       document.body.classList.add("dark");
-      setDarkMode(true);
+    } else {
+      document.body.classList.remove("dark");
     }
-  }, []);
+  }, [darkMode]);
 
   const toggleTheme = () => {
-    if (darkMode) {
-      document.body.classList.remove("dark");
-      localStorage.setItem("theme", "light");
-    } else {
-      document.body.classList.add("dark");
-      localStorage.setItem("theme", "dark");
-    }
-
-    setDarkMode(!darkMode);
+    const nextDark = !darkMode;
+    setDarkMode(nextDark);
+    localStorage.setItem("theme", nextDark ? "dark" : "light");
   };
 
   return (
@@ -39,13 +35,28 @@ function Navbar() {
           menuOpen ? "active" : ""
         }`}
       >
-        <Link to="/">Home</Link>
+        <Link to="/" onClick={() => setMenuOpen(false)}>Home</Link>
 
-        <Link to="/events">Events</Link>
+        <Link to="/events" onClick={() => setMenuOpen(false)}>Events</Link>
 
-        <Link to="/products">Products</Link>
+        <Link to="/products" onClick={() => setMenuOpen(false)}>Products</Link>
 
-        <Link to="/workshops">Workshops</Link>
+        <Link to="/workshops" onClick={() => setMenuOpen(false)}>Workshops</Link>
+
+        <div className="mobile-controls">
+          <LanguageSelector />
+          <button
+            className="theme-btn"
+            onClick={() => {
+              toggleTheme();
+              setMenuOpen(false);
+            }}
+            aria-label={darkMode ? "Switch to light mode" : "Switch to dark mode"}
+            title={darkMode ? "Light mode" : "Dark mode"}
+          >
+            {darkMode ? "☀️" : "🌙"}
+          </button>
+        </div>
       </div>
 
       <div className="nav-right">
@@ -65,6 +76,7 @@ function Navbar() {
         <button
           className="hamburger"
           onClick={() => setMenuOpen(!menuOpen)}
+          aria-label="Toggle navigation menu"
         >
           ☰
         </button>
