@@ -265,6 +265,10 @@ function Events() {
               src={event.image}
               className="w-full h-48 object-cover rounded-xl mb-4"
               alt={event.title}
+              width="400"
+              height="192"
+              loading="lazy"
+              decoding="async"
             />
 
             <h3 className="text-xl font-bold text-green-900 mb-2">

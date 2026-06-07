@@ -52,6 +52,10 @@ function Products() {
             <img
               src={product.image}
               alt={product.name}
+              width="400"
+              height="200"
+              loading="lazy"
+              decoding="async"
             />
 
             <h3>{product.name}</h3>

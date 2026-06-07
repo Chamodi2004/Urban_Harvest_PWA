@@ -25,7 +25,14 @@ function EventDetails() {
   return (
     <div className="container">
       <article className="detail-card">
-        <img src={event.image} alt={event.title} />
+        <img
+          src={event.image}
+          alt={event.title}
+          width="800"
+          height="420"
+          loading="lazy"
+          decoding="async"
+        />
 
         <h1>{event.title}</h1>
 

@@ -44,7 +44,14 @@ function Home() {
         </div>
 
         <div className="hero-visual">
-          <img src="/IMG1.jpg" alt="Hero" />
+          <img
+            src="/IMG1.jpg"
+            alt="Hero"
+            width="520"
+            height="420"
+            decoding="async"
+            fetchPriority="high"
+          />
         </div>
       </section>
 
@@ -68,7 +75,14 @@ function Home() {
         </div>
 
         <div className="about-image">
-          <img src="/IMG2.jpg" alt="About" />
+          <img
+            src="/IMG2.jpg"
+            alt="About"
+            width="520"
+            height="420"
+            loading="lazy"
+            decoding="async"
+          />
         </div>
       </section>
 

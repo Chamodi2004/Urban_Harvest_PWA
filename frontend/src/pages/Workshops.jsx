@@ -52,6 +52,10 @@ function Workshops() {
             <img
               src={workshop.image}
               alt={workshop.title}
+              width="400"
+              height="200"
+              loading="lazy"
+              decoding="async"
             />
 
             <h3>{workshop.title}</h3>

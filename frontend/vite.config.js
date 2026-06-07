@@ -13,14 +13,6 @@ export default defineConfig({
 
       includeAssets: [
         "favicon.jpg",
-        "IMG1.jpg",
-        "IMG2.jpg",
-        "workshop.jpg",
-        "composite bin.jpg",
-        "recycling.jpg",
-        "seeds.jpg",
-        "tools.jpg",
-        "gardening.jpg",
         "icon-192.png",
         "icon-512.png",
         "offline.html",
@@ -52,7 +44,8 @@ export default defineConfig({
       },
 
       workbox: {
-        globPatterns: ["**/*.{js,css,html,ico,png,jpg,jpeg,svg,webp,webmanifest}"],
+        globPatterns: ["**/*.{js,css,html,ico,svg,webmanifest}"],
+        globIgnores: ["**/*.{jpg,jpeg,png,webp,gif}"],
         navigateFallback: "/index.html",
         navigateFallbackDenylist: [/^\/api/, /\.[a-zA-Z0-9]+$/],
         runtimeCaching: [

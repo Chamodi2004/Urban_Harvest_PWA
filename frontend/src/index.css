@@ -441,7 +441,7 @@
     padding-right: max(12px, env(safe-area-inset-right, 0px));
     display: grid;
     grid-template-columns: minmax(0, 1fr) auto;
-    grid-template-areas: "logo controls";
+    grid-template-areas: "logo end";
     align-items: center;
     gap: 8px;
     position: fixed;
@@ -482,8 +482,8 @@
     border-radius: 8px;
   }
 
-  .controls {
-    grid-area: controls;
+  .navbar-end {
+    grid-area: end;
     display: flex;
     align-items: center;
     gap: 8px;
@@ -493,7 +493,21 @@
   .nav-right {
     display: none;
     align-items: center;
-    margin-left: 14px;
+  }
+
+  .nav-logout-btn {
+    border: none;
+    cursor: pointer;
+    background: transparent;
+    color: white;
+    font-size: 1rem;
+    text-align: left;
+    font-family: inherit;
+    padding: 0;
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+    width: 100%;
   }
 
   .theme-btn,
@@ -848,7 +862,8 @@
 
   .navbar {
     display: flex;
-    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
     padding: 12px max(16px, env(safe-area-inset-left, 0px));
     padding-top: calc(12px + env(safe-area-inset-top, 0px));
     padding-right: max(16px, env(safe-area-inset-right, 0px));
@@ -856,12 +871,18 @@
 
   .logo {
     grid-area: unset;
-    flex-shrink: 1;
+    flex: 0 1 auto;
+    min-width: 0;
   }
 
-  .controls {
+  .logo span {
+    display: inline;
+  }
+
+  .navbar-end {
     grid-area: unset;
     margin-left: auto;
+    flex-shrink: 0;
   }
 
   .nav-right {
@@ -875,7 +896,7 @@
   .nav-links {
     display: flex;
     position: static;
-    flex: 1;
+    flex: 1 1 auto;
     flex-direction: row;
     justify-content: center;
     align-items: center;
@@ -886,10 +907,12 @@
     padding: 0;
     box-shadow: none;
     background: transparent;
+    order: 0;
   }
 
   .nav-links a,
-  .nav-links button {
+  .nav-links button,
+  .nav-logout-btn {
     width: auto;
     padding: 0;
     display: inline-flex;
