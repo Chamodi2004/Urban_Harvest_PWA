@@ -16,7 +16,9 @@ function Login() {
         password,
       });
 
-      localStorage.setItem("token", res.data.token);
+      if (res.data && res.data.token) {
+        localStorage.setItem("token", res.data.token);
+      }
       alert("Login Successful");
       navigate("/");
     } catch (error) {
