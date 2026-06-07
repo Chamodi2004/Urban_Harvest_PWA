@@ -1,7 +1,9 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import api from "../services/api";
 
 function Register() {
+  const navigate = useNavigate();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -12,9 +14,13 @@ function Register() {
     try {
       const sanitizedEmail = email.toLowerCase().trim();
       const sanitizedName = name.trim();
-      await api.post("/api/auth/register", { name: sanitizedName, email: sanitizedEmail, password });
+      const res = await api.post("/api/auth/register", { name: sanitizedName, email: sanitizedEmail, password });
 
+      if (res.data && res.data.token) {
+        localStorage.setItem("token", res.data.token);
+      }
       alert("Registration Successful");
+      navigate("/");
     } catch (error) {
       const msg = error?.response?.data?.message || "Registration Failed";
       alert(msg);

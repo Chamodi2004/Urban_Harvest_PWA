@@ -52,7 +52,7 @@ function Events() {
   const fetchEvents = () => {
     setLoading(true);
     api
-      .get("/events")
+      .get("/api/events")
       .then((res) => {
         setEvents(res.data?.length ? res.data : sampleEvents);
       })
@@ -81,9 +81,9 @@ function Events() {
 
     try {
       if (editingId) {
-        await api.put(`/events/${editingId}`, eventData);
+        await api.put(`/api/events/${editingId}`, eventData);
       } else {
-        await api.post("/events", eventData);
+        await api.post("/api/events", eventData);
       }
 
       setTitle("");
@@ -117,7 +117,7 @@ function Events() {
     if (!confirm("Delete this event?")) return;
 
     try {
-      await api.delete(`/events/${id}`);
+      await api.delete(`/api/events/${id}`);
       fetchEvents();
     } catch (error) {
       alert(error.message);

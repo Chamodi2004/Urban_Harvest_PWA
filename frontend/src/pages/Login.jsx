@@ -1,7 +1,9 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import api from "../services/api";
 
 function Login() {
+  const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
@@ -16,6 +18,7 @@ function Login() {
 
       localStorage.setItem("token", res.data.token);
       alert("Login Successful");
+      navigate("/");
     } catch (error) {
       const msg = error?.response?.data?.message || "Login Failed";
       alert(msg);

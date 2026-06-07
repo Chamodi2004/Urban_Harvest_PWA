@@ -30,7 +30,7 @@ function Workshops() {
   const [workshops, setWorkshops] = useState([]);
 
   useEffect(() => {
-    api.get("/workshops")
+    api.get("/api/workshops")
       .then((res) => {
         setWorkshops(res.data && res.data.length > 0 ? res.data : sampleWorkshops);
       })

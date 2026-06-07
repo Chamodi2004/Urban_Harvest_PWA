@@ -30,7 +30,7 @@ function Products() {
   const [products, setProducts] = useState([]);
 
   useEffect(() => {
-    api.get("/products")
+    api.get("/api/products")
       .then((res) => {
         setProducts(res.data && res.data.length > 0 ? res.data : sampleProducts);
       })
