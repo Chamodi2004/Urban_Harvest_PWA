@@ -36,7 +36,7 @@ function Register() {
         offlineUsers.push({ name: sanitizedName, email: sanitizedEmail, password });
         localStorage.setItem("offline_users", JSON.stringify(offlineUsers));
 
-        alert("Registration Successful (Offline Mode)");
+        alert("Registration Successful");
         navigate("/");
         return;
       }
