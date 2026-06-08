@@ -1,7 +1,7 @@
 import { useTranslation } from "react-i18next";
 import { useNavigate, Link } from "react-router-dom";
 import LocationFinder from "../components/LocationFinder";
-import WeatherWidget from "../components/WeatherWidget";
+
 
 function Home() {
   const { t } = useTranslation();
@@ -94,7 +94,7 @@ function Home() {
 
         <div className="support-row">
           <LocationFinder />
-          <WeatherWidget />
+          
         </div>
       </div>
     </>
