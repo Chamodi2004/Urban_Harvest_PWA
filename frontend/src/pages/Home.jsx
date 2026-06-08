@@ -94,26 +94,9 @@ function Home() {
 
         <div className="support-row">
           <LocationFinder />
+          <WeatherWidget />
         </div>
       </div>
-
-      {/* WEATHER / LOCAL INFO SECTION */}
-      <section className="relative px-6 py-24 bg-gradient-to-t from-green-50/40 via-white to-transparent dark:from-gray-950 dark:via-gray-900 dark:to-transparent">
-        <div className="max-w-4xl mx-auto text-center">
-          <h2 className="text-3xl md:text-4xl font-display font-extrabold text-ecoGreen dark:text-green-400 mb-4">
-            Colombo Climate Center
-          </h2>
-
-          <p className="text-gray-600 dark:text-gray-400 max-w-lg mx-auto mb-10 text-sm md:text-base">
-            Check the current weather conditions to plan your gardening
-            sessions, planting schedules, or outdoor eco-events.
-          </p>
-
-          <div className="hover:scale-[1.01] transition-transform duration-300">
-            <WeatherWidget />
-          </div>
-        </div>
-      </section>
     </>
   );
 }
