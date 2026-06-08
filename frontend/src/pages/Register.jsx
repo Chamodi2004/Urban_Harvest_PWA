@@ -14,11 +14,8 @@ function Register() {
     try {
       const sanitizedEmail = email.toLowerCase().trim();
       const sanitizedName = name.trim();
-      const res = await api.post("/api/auth/register", { name: sanitizedName, email: sanitizedEmail, password });
+      await api.post("/api/auth/register", { name: sanitizedName, email: sanitizedEmail, password });
 
-      if (res.data && res.data.token) {
-        localStorage.setItem("token", res.data.token);
-      }
       alert("Registration Successful");
       navigate("/");
     } catch (error) {
