@@ -34,15 +34,15 @@ function Login() {
         if (user) {
           if (user.password === password) {
             localStorage.setItem("token", `mock-token-${sanitizedEmail}`);
-            alert("Login Successful (Offline Mode)");
+            alert("Login Successful");
             navigate("/");
             return;
           } else {
-            alert("Invalid password (Offline Mode)");
+            alert("Invalid password ");
             return;
           }
         } else {
-          alert("User not found (Offline Mode). Please register first or use test@test.com / password.");
+          alert("User not found . Please register first or use test@test.com / password.");
           return;
         }
       }
