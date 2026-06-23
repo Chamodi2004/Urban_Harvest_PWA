@@ -42,7 +42,29 @@ function EventDetails() {
             date: "2026-06-25",
           },
         ];
-        const found = sampleEvents.find((e) => e._id === id);
+
+        // Read offline data from localStorage
+        const offlineEvents = JSON.parse(localStorage.getItem("offline_events") || "[]");
+        const editedEvents = JSON.parse(localStorage.getItem("edited_events") || "{}");
+        const deletedEvents = JSON.parse(localStorage.getItem("deleted_events") || "[]");
+
+        if (deletedEvents.includes(id)) {
+          setEvent(null);
+          return;
+        }
+
+        // Try offline created events first
+        let found = offlineEvents.find((e) => e._id === id);
+
+        if (!found) {
+          // Try sample events
+          const baseEvent = sampleEvents.find((e) => e._id === id);
+          if (baseEvent) {
+            // Apply offline edits if any
+            found = editedEvents[id] ? { ...baseEvent, ...editedEvents[id] } : baseEvent;
+          }
+        }
+
         if (found) {
           setEvent(found);
         }

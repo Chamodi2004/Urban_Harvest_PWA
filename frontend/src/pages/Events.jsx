@@ -57,7 +57,26 @@ function Events() {
         setEvents(res.data?.length ? res.data : sampleEvents);
       })
       .catch(() => {
-        setEvents(sampleEvents);
+        // Offline / network error fallback: load and merge local storage changes
+        const offlineEvents = JSON.parse(localStorage.getItem("offline_events") || "[]");
+        const editedEvents = JSON.parse(localStorage.getItem("edited_events") || "{}");
+        const deletedEvents = JSON.parse(localStorage.getItem("deleted_events") || "[]");
+
+        // Filter out deleted events from sampleEvents
+        let merged = sampleEvents.filter((event) => !deletedEvents.includes(event._id));
+
+        // Apply edits to remaining sampleEvents
+        merged = merged.map((event) => {
+          if (editedEvents[event._id]) {
+            return { ...event, ...editedEvents[event._id] };
+          }
+          return event;
+        });
+
+        // Append offline created events
+        merged = [...merged, ...offlineEvents];
+
+        setEvents(merged);
       })
       .finally(() => setLoading(false));
   };
@@ -97,6 +116,46 @@ function Events() {
 
       fetchEvents();
     } catch (error) {
+      if (!error.response) {
+        // Backend is down / network error -> Offline mode
+        if (editingId) {
+          // Edit event offline
+          if (String(editingId).startsWith("mock-event-")) {
+            // It's an offline-created event, update it in offline_events
+            const offlineEvents = JSON.parse(localStorage.getItem("offline_events") || "[]");
+            const updatedOffline = offlineEvents.map((evt) =>
+              evt._id === editingId ? { ...evt, ...eventData } : evt
+            );
+            localStorage.setItem("offline_events", JSON.stringify(updatedOffline));
+          } else {
+            // It's a backend or sample event, save edits to edited_events
+            const editedEvents = JSON.parse(localStorage.getItem("edited_events") || "{}");
+            editedEvents[editingId] = { ...eventData, _id: editingId };
+            localStorage.setItem("edited_events", JSON.stringify(editedEvents));
+          }
+          alert("Event updated successfully (Offline Mode)");
+        } else {
+          // Create event offline
+          const newId = `mock-event-${Date.now()}`;
+          const newEvent = { ...eventData, _id: newId };
+          const offlineEvents = JSON.parse(localStorage.getItem("offline_events") || "[]");
+          offlineEvents.push(newEvent);
+          localStorage.setItem("offline_events", JSON.stringify(offlineEvents));
+          alert("Event created successfully (Offline Mode)");
+        }
+
+        setTitle("");
+        setDescription("");
+        setEventCategory("Gardening");
+        setLocation("");
+        setDate("");
+        setImage("/workshop.jpg");
+        setEditingId(null);
+        setShowForm(false);
+
+        fetchEvents();
+        return;
+      }
       alert(error.response?.data?.message || error.message);
     }
   };
@@ -120,6 +179,25 @@ function Events() {
       await api.delete(`/api/events/${id}`);
       fetchEvents();
     } catch (error) {
+      if (!error.response) {
+        // Backend is down / network error -> Offline mode
+        if (String(id).startsWith("mock-event-")) {
+          // Delete from offline_events
+          const offlineEvents = JSON.parse(localStorage.getItem("offline_events") || "[]");
+          const updatedOffline = offlineEvents.filter((evt) => evt._id !== id);
+          localStorage.setItem("offline_events", JSON.stringify(updatedOffline));
+        } else {
+          // Add to deleted_events
+          const deletedEvents = JSON.parse(localStorage.getItem("deleted_events") || "[]");
+          if (!deletedEvents.includes(id)) {
+            deletedEvents.push(id);
+            localStorage.setItem("deleted_events", JSON.stringify(deletedEvents));
+          }
+        }
+        alert("Event deleted successfully (Offline Mode)");
+        fetchEvents();
+        return;
+      }
       alert(error.message);
     }
   };
